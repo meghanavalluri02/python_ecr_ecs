@@ -20,8 +20,35 @@ phases:
       - echo Pushing image...
       - docker push $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME:$IMAGE_TAG
       - printf '[{"name":"bluegreen","imageUri":"%s.dkr.ecr.%s.amazonaws.com/%s:%s"}]' $ACCOUNT_ID $REGION $REPO_NAME $IMAGE_TAG > imagedefinitions.json
-
+      - echo Writing taskdef.json...
+      - |
+        cat <<EOF > taskdef.json
+        {
+          "family": "$TASK_FAMILY",
+          "networkMode": "awsvpc",
+          "executionRoleArn": "arn:aws:iam::$ACCOUNT_ID:role/ecsTaskExecutionRole",
+          "containerDefinitions": [
+            {
+              "name": "$CONTAINER_NAME",
+              "image": "$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME:$IMAGE_TAG",
+              "portMappings": [
+                {
+                  "containerPort": 8080,
+                  "hostPort": 8080,
+                  "protocol": "tcp"
+                }
+              ],
+              "essential": true
+            }
+          ],
+          "requiresCompatibilities": ["FARGATE"],
+          "cpu": "256",
+          "memory": "512"
+        }
+      EOF
+      
 artifacts:
   files:
     - imagedefinitions.json
     - appspec.yml
+    - taskdef.json
