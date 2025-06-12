@@ -7,7 +7,7 @@ phases:
       - aws --version
       - ACCOUNT_ID=156041402660
       - REGION=us-east-1
-      - REPO_NAME=python
+      - REPO_NAME=blugreen
       - IMAGE_TAG=latest
       - aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com
   build:
@@ -19,7 +19,7 @@ phases:
     commands:
       - echo Pushing image...
       - docker push $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME:$IMAGE_TAG
-      - printf '[{"name":"python","imageUri":"%s.dkr.ecr.%s.amazonaws.com/%s:%s"}]' $ACCOUNT_ID $REGION $REPO_NAME $IMAGE_TAG > imagedefinitions.json
+      - printf '[{"name":"bluegreen","imageUri":"%s.dkr.ecr.%s.amazonaws.com/%s:%s"}]' $ACCOUNT_ID $REGION $REPO_NAME $IMAGE_TAG > imagedefinitions.json
 
 artifacts:
   files:
