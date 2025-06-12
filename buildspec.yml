@@ -13,13 +13,15 @@ phases:
   build:
     commands:
       - echo Building Docker image...
-      - docker build -t $REPOSITORY_URI:$IMAGE_TAG .
+      - docker build -t $REPO_NAME .
+      - docker tag $REPO_NAME:$IMAGE_TAG $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME:$IMAGE_TAG
   post_build:
     commands:
       - echo Pushing image...
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - printf '[{"name":"python","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - docker push $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME:$IMAGE_TAG
+      - printf '[{"name":"demo1","imageUri":"%s.dkr.ecr.%s.amazonaws.com/%s:%s"}]' $ACCOUNT_ID $REGION $REPO_NAME $IMAGE_TAG > imagedefinitions.json
 
 artifacts:
   files:
     - imagedefinitions.json
+    - appspec.yml
