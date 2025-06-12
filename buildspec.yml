@@ -19,7 +19,7 @@ phases:
     commands:
       - echo Pushing image...
       - docker push $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO_NAME:$IMAGE_TAG
-      - printf '[{"name":"demo1","imageUri":"%s.dkr.ecr.%s.amazonaws.com/%s:%s"}]' $ACCOUNT_ID $REGION $REPO_NAME $IMAGE_TAG > imagedefinitions.json
+      - printf '[{"name":"python","imageUri":"%s.dkr.ecr.%s.amazonaws.com/%s:%s"}]' $ACCOUNT_ID $REGION $REPO_NAME $IMAGE_TAG > imagedefinitions.json
 
 artifacts:
   files:
